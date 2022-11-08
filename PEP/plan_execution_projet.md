@@ -24,7 +24,7 @@
 
 *<Décrire les différentes fonctionnalités (nom, description, etc.) de votre produit.>*
 
-*<Prioritiser ces fonctionnalités par ordre d’importance pour le produit.>*
+*<Prioriser ces fonctionnalités par ordre d’importance pour le produit.>*
 
 ### 1.4. Exigences opérationnelles
 
