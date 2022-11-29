@@ -2,9 +2,9 @@
 
 # Plan d’exécution du Projet
 
-*<Version 1.0>*
+*Version 1.0*
 
-*<jj/mm/aaaa>*
+*29/11/2022*
 
 ### Auteurs
 
