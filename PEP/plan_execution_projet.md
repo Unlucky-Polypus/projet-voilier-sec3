@@ -69,6 +69,8 @@ Retour de commande + Debug / Test + charge de la batterie
 *<Définir votre plan de validation du produit pour démontrer que le produit répond bien aux attentes du client. Vous devez définir les procédures de test et les démonstrations d’usage prévus pour valider les exigences définies avant.>*
 
 ### 1.6. Fonctionnalités réutilisables
+#### TPs SINT et projet serre
+Nous avons utilisé durant ces projets les protocoles de communication UART, I2C et série que nous allons intégrer dans ce projet. Nous allons pouvoir récupérer 
 Réutilisation des TPs de SINT (projet serre) pour les protocoles de communication (UART, I2C, série...), réutilisation du TP temps réel (sémaphores avec les voitures).
 Nous pourrons éventuellement nous inspirer de projets réalisés en entreprises ou en stage.
 *<Identifier des projets existants que vous pourriez réutiliser. Pour chacune des fonctionnalités, indiquer les éléments que vous avez identifiés avoir les éventuelles limitations en relation avec vos objectifs. Estimer la difficulté pour réutiliser ces projets en fonctions de la qualité de la documentation, de la qualité du code, etc.>*
@@ -116,5 +118,20 @@ Les livrables attendus pour ce projet sont le code (commenté bien entendu) ains
 *<Backlog: donner la liste des fonctionnalités (nom, description) qui sont planifiées sur les périodes suivantes (pas besoin de préciser sur quelle période). Donner une priorité à ces fonctionnalités (au cas où il faudrait faire un choix).>*
 
 ## 5. Management du risque
+Durant le développement de ce projet, plusieurs points comportent des risques.
 
-<Lister les risques (retard, échec, organisation, etc.) possible pour le projet. Pour chacun évaluer le facteur de risque (probalité et impact) et les actiosn à entreprendre pour prévenir le risque et y répondre s'il survient.>
+### Mauvaise planification
+Il est possible que nous ayons mal estimé la durée et/ou la difficulté de chacune des tâches en lesquels nous avons décomposé le projet et cela pourrait mener à un retard voire un échec. 
+Il est assez probable que nous ayons mal estimé la durée des tâches du projet et pour prévenir cet écueil d'avoir un impact trop important à la fin du projet , nous allons réévaluer notre liste de tâche à chaque séance pour vérifier notre avancement par rapport à nos prévisions.
+
+### Mauvaises spécifications
+Nous pouvons aussi nous rendre compte au cours du projet que nous nous sommes trompés de composants lors de la phase de spécifications. Le moyen d'éviter ce problème est de faire valider nos choix par des experts dans le domaine.
+
+### Panne matérielle et logicielle
+La fiabilité des composants et la robustesse de notre code peuvent être remises en cause et c'est pourquoi nous avons prévu de garder le contrôle manuel. Le mode manuel sera activé en cas de panne matérielle, logicielle ou sur décision d'un opérateur à terre.
+
+### Approvisionnement 
+Le retard de livraison de certains composants est un autre problème qui peut se poser, surtout durant cette période de crise des semis-conducteurs. C'est pour cette raison que nous avons défini dès le début du projet les composants dont nous allons avoir besoin, et ce afin de les commander au plus tôt si besoin. Un manque de composant pourrait nous empêcher de développer certaines fonctionnalités dont certaines sont critiques.
+
+### Conditions météorologiques
+Les conditions météorologiques peuvent nous empêcher de faire un test en condition réelle ou bien nous empêcher de démontrer le bon fonctionnement du produit. Nous ne pouvons pas trouver de solutions à cette éventualité car les créneaux d'essais et de démonstrations sont fixés.
