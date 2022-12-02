@@ -166,7 +166,7 @@ Si on doit les classer par criticité :
  
 ##### Tâches à compléter si le temps le permet
  
-Développement d'une interface web qui interprète les logs (Nolann)
+- Développement d'une interface web qui interprète les logs (Nolann)
 
 ##### Bilan
  
