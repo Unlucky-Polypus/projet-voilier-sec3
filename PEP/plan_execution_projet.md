@@ -105,7 +105,7 @@ On décompose le projet en 4 Phases :
 - **Phase III** : Mise en commun (date de fin : 23/03)
 - **Phase IV** : Correction et finalisation (date de fin : 26/05)
 
-**Livrable**
+##### Livrable
  
 -Code C++ annoté et compatible avec Doxygene
 -Le README du fichier git sera incrémenté au fur et à mesure
