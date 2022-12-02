@@ -97,25 +97,75 @@ Nous pourrons éventuellement nous inspirer de projets réalisés en entreprises
 ## 4. Planning du projet
 
 ### 4.1. Jalons et délivrables
-- **02/12/22** : Revue PEP
-- **18/01/23** : Revue + rétrospective
-- **22/03/23** : Revue + rétrospective
-- **15/05/23** : Revue + rétrospective   
+ 
+On décompose le projet en 4 Phases :
+-Phase I : Spécifications du projet (date de fin : 02/12)
+-Phase II : Implémentation des capteurs (date de fin : 25/01)
+-Phase III : Mise en commun (date de fin : 23/03)
+-Phase IV : Correction et finalisation (date de fin : 26/05)
 
-Les livrables attendus pour ce projet sont le code (commenté bien entendu) ainsi que sa documentation, la nomenclature des composants utilisés
-*<Rappeler les dates importantes du projet (périodes, revues, etc.) et les délivrables attendus : ce document, la documentation finale, code, etc.>*
-
+Livrable : 
+-Code C++ annoté et compatible avec Doxygene
+-Le README du fichier git sera incrémenté au fur et à mesure
+-J1: On réussit à implémenter le GPS et une première connexion Xbee. Doit être terminé à la moitié de la phase II
+-J2: La girouette est physiquement créée, un démonstrateur permet d’envoyer des trames GPS par Xbee, les calculs théoriques pour l’orientation des voiles et du safran sont validés et on peut interpréter les commandes RF. Date limite : fin phase II
+-J3: L’implémentation de la girouette, du compas, ainsi que l’implémentation théorique du safran et de la voile sont réalisés.Doit être terminé à la moitié de la phase III
+-J4: Un démonstrateur avec un ventilateur permettant de simuler la girouette est utilisé. Les tests unitaires, fonctionnels et limitants sont implémentés et les données à envoyer par Xbee sont spécifiées. Date limite : fin phase III
+-J5: Fin de validation des différents tests et ajout de la gestion temps réelle des différentes fonctionnalités. Doit être terminé à la moitié de la phase IV
+-J6: Développement d’un démonstrateur permettant de réunir l’ensemble des fonctionnalités. Développement d’une interface web pour l’interprétation des logs Xbee du transmit. Date limite : fin phase IV
+ 
 ### 4.2. Planning de la première période
 
-*<Donner les objectifs de réalisation sur la première période. Lister les fonctionnalités qui seront opérationnelle à la fin de la période (nom, description) ainsi que leurs tests d’acceptation (autrement dit qu’est-ce qui permettra de dire que la fonctionnalité est réalisée).>*
+ Tâches : 
 
-*<Pour chaque fonctionnalité, évaluer leur difficulté/durée et décomposer les en tâches à mener pour les réaliser.>*
+Implémentation d'une première communication Xbee (Thomas)
+Implémentation de la communication STM32/GPS (Valentin)
+Réception et interprétation des commandes RF (Louis)
+Calculs et théorie de l'activation du safran et des voiles (Nolann)
 
-*<Préciser par fonctionnalité quels membres de l’équipe y sera affecté lors de la première période.>*
+Rendu : 
+
+Démonstrateur permettant d’envoyer des données GPS par Xbee
+
+Temps et difficulté : 
+
+Chaque membre de l’équipe dispose d’une tâche pour cette période. 
+Si on doit les classer par criticité : 
+-Réception et interprétation des commandes RF 
+-Calculs et théorie de l'activation du safran et des voiles 
+-Implémentation de la communication STM32/GPS
+-Conception de la girouette 
+-Implémentation d'une première communication Xbee
+
 
 ### 4.3. Backlog
 
-*<Backlog: donner la liste des fonctionnalités (nom, description) qui sont planifiées sur les périodes suivantes (pas besoin de préciser sur quelle période). Donner une priorité à ces fonctionnalités (au cas où il faudrait faire un choix).>*
+Tâches vitales : 
+ 
+Validation du fonctionnement du switch mode manuel (Théo/Thomas)
+Implémentation de tests fonctionnels et unitaires (Louis)
+Tâches importantes : 
+Implémentation du compas (Valentin)
+Implémentation de la girouette (Théo)
+Implémentation de la gestion du safran et des voiles (Nolann)
+Ajout et vérification du fonctionnement temps réel de l'ensemble (Valentin)
+Création d’un mode dégradé (Théo)
+Validation des test fonctionnels en mode auto (Louis)
+ 
+Tâches secondaires : 
+
+Spécification des données échangées par Xbee et spécification des échanges (Thomas)
+Implémentation des échanges Xbee (Thomas)
+ 
+Tâches à compléter si le temps le permet : 
+ 
+Développement d'une interface web qui interprète les logs (Nolann)
+
+Bilan : 
+ 
+Hormis la tâche de développement Web, tout me semble indispensable au MVP.
+De même, nous sommes 5 et les tâches sont équitablement réparties. Pour nous, tout est réalisable et sera réalisé
+
 
 ## 5. Management du risque
 Durant le développement de ce projet, plusieurs points comportent des risques.
