@@ -99,12 +99,14 @@ Nous pourrons éventuellement nous inspirer de projets réalisés en entreprises
 ### 4.1. Jalons et délivrables
  
 On décompose le projet en 4 Phases :
--Phase I : Spécifications du projet (date de fin : 02/12)
--Phase II : Implémentation des capteurs (date de fin : 25/01)
--Phase III : Mise en commun (date de fin : 23/03)
--Phase IV : Correction et finalisation (date de fin : 26/05)
+ 
+-**Phase I** : Spécifications du projet (date de fin : 02/12)
+-**Phase II** : Implémentation des capteurs (date de fin : 25/01)
+-**Phase III** : Mise en commun (date de fin : 23/03)
+-**Phase IV** : Correction et finalisation (date de fin : 26/05)
 
-Livrable : 
+**Livrable**
+ 
 -Code C++ annoté et compatible avec Doxygene
 -Le README du fichier git sera incrémenté au fur et à mesure
 -J1: On réussit à implémenter le GPS et une première connexion Xbee. Doit être terminé à la moitié de la phase II
@@ -116,18 +118,18 @@ Livrable :
  
 ### 4.2. Planning de la première période
 
- Tâches : 
+**Tâches** 
 
 Implémentation d'une première communication Xbee (Thomas)
 Implémentation de la communication STM32/GPS (Valentin)
 Réception et interprétation des commandes RF (Louis)
 Calculs et théorie de l'activation du safran et des voiles (Nolann)
 
-Rendu : 
+**Rendu**
 
 Démonstrateur permettant d’envoyer des données GPS par Xbee
 
-Temps et difficulté : 
+**Temps et difficulté**
 
 Chaque membre de l’équipe dispose d’une tâche pour cette période. 
 Si on doit les classer par criticité : 
@@ -140,7 +142,7 @@ Si on doit les classer par criticité :
 
 ### 4.3. Backlog
 
-Tâches vitales : 
+**Tâches vitales**
  
 Validation du fonctionnement du switch mode manuel (Théo/Thomas)
 Implémentation de tests fonctionnels et unitaires (Louis)
@@ -152,20 +154,19 @@ Ajout et vérification du fonctionnement temps réel de l'ensemble (Valentin)
 Création d’un mode dégradé (Théo)
 Validation des test fonctionnels en mode auto (Louis)
  
-Tâches secondaires : 
+**Tâches secondaires**
 
 Spécification des données échangées par Xbee et spécification des échanges (Thomas)
 Implémentation des échanges Xbee (Thomas)
  
-Tâches à compléter si le temps le permet : 
+**Tâches à compléter si le temps le permet** 
  
 Développement d'une interface web qui interprète les logs (Nolann)
 
-Bilan : 
+**Bilan**
  
 Hormis la tâche de développement Web, tout me semble indispensable au MVP.
 De même, nous sommes 5 et les tâches sont équitablement réparties. Pour nous, tout est réalisable et sera réalisé
-
 
 ## 5. Management du risque
 Durant le développement de ce projet, plusieurs points comportent des risques.
