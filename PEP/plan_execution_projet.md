@@ -100,12 +100,10 @@ Nous pourrons éventuellement nous inspirer de projets réalisés en entreprises
  
 On décompose le projet en 4 Phases :
  
--**Phase I** : Spécifications du projet (date de fin : 02/12)
--**Phase II** : Implémentation des capteurs (date de fin : 25/01)
- 
--**Phase III** : Mise en commun (date de fin : 23/03)
- 
--**Phase IV** : Correction et finalisation (date de fin : 26/05)
+- **Phase I** : Spécifications du projet (date de fin : 02/12)
+- **Phase II** : Implémentation des capteurs (date de fin : 25/01)
+- **Phase III** : Mise en commun (date de fin : 23/03)
+- **Phase IV** : Correction et finalisation (date de fin : 26/05)
 
 **Livrable**
  
