@@ -88,11 +88,11 @@ Nous pourrons éventuellement nous inspirer de projets réalisés en entreprises
 ### 2.2. Architecture logicielle
 
 ## 3. Équipe
-- **Louis Guibert** : Mécano / Testeur
-- **Valentin Boudevin (coach phase 1)** : Temps réel / sémaphores + Membre Premium du Tinder Gang
-- **Théo Gaboreau** : Consultant en girouette, expert schéma
-- **Thomas Debeire** : FPGA
-- **Nolann Borjon-Piron** : Navigation, algorithmie
+- **Louis Guibert** : Responsable de la validation produit et des tests
+- **Valentin Boudevin** : Responsable programmation temps réel
+- **Théo Gaboreau** : Architecte système, Concepteur girouette
+- **Thomas Debeire** : Responsable des communications externes (en Xbee)
+- **Nolann Borjon-Piron** : Responsable de l'algorithme de la  navigation
 
 ## 4. Planning du projet
 
