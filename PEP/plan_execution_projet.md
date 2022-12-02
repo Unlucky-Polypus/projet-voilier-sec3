@@ -123,10 +123,10 @@ On décompose le projet en 4 Phases :
 
 ##### Tâches
 
-Implémentation d'une première communication Xbee (Thomas)
-Implémentation de la communication STM32/GPS (Valentin)
-Réception et interprétation des commandes RF (Louis)
-Calculs et théorie de l'activation du safran et des voiles (Nolann)
+- Implémentation d'une première communication Xbee (Thomas)
+- Implémentation de la communication STM32/GPS (Valentin)
+- Réception et interprétation des commandes RF (Louis)
+- Calculs et théorie de l'activation du safran et des voiles (Nolann)
 
 ##### Rendu
 
@@ -147,22 +147,22 @@ Si on doit les classer par criticité :
 
 ##### Tâches vitales
  
-Validation du fonctionnement du switch mode manuel (Théo/Thomas)
-Implémentation de tests fonctionnels et unitaires (Louis)
+- Validation du fonctionnement du switch mode manuel (Théo/Thomas)
+- Implémentation de tests fonctionnels et unitaires (Louis)
 
 ##### Tâches importantes : 
  
-Implémentation du compas (Valentin)
-Implémentation de la girouette (Théo)
-Implémentation de la gestion du safran et des voiles (Nolann)
-Ajout et vérification du fonctionnement temps réel de l'ensemble (Valentin)
-Création d’un mode dégradé (Théo)
-Validation des test fonctionnels en mode auto (Louis)
+- Implémentation du compas (Valentin)
+- Implémentation de la girouette (Théo)
+- Implémentation de la gestion du safran et des voiles (Nolann)
+- Ajout et vérification du fonctionnement temps réel de l'ensemble (Valentin)
+- Création d’un mode dégradé (Théo)
+- Validation des test fonctionnels en mode auto (Louis)
  
 ##### Tâches secondaires
 
-Spécification des données échangées par Xbee et spécification des échanges (Thomas)
-Implémentation des échanges Xbee (Thomas)
+- Spécification des données échangées par Xbee et spécification des échanges (Thomas)
+- Implémentation des échanges Xbee (Thomas)
  
 ##### Tâches à compléter si le temps le permet
  
