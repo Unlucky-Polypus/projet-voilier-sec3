@@ -78,14 +78,38 @@ Nous pourrons éventuellement nous inspirer de projets réalisés en entreprises
 ## 2. Architecture
 
 ### 2.1. Architecture matérielle
-- GPS : GPS-RTK-SMA ZED-F9P 
-- Récepteur Radio : ANN-MB-02-00 
-- Adaptateur Xbee vers micro-USB Adaptateur : Xbee USB 11293 
-- Module Xbee : Module Xbee série 2C XB24CZ7WIT-004 
-- Accéléromètre : Module 9 DoF MPU9250 Grove 101020080 
+
+- Module Relai
+ 
+ Nous récupérons la commande du 3eme canal, et avec un montage électronique nous commanderons un relai qui permettra de couper physiquement la commande des servos depuis le STM32. Ainsi, même si le programme est défaillant, nous pourrons reprendre la main manuellement si nécessaire.
+
+- STM32F303K8 MCU
+ 
+ Nous utiliserons un STM32F303K8 MCU  présentant 1 bus I2C et 1 bus SPI. Cette carte fournit un compromis entre une puissance de calcul élevée et une consommation réduite.
+
+- GPS : GPS-RTK-SMA ZED-F9P
+- Récepteur Radio : ANN-MB-02-00
+- Adaptateur Xbee vers micro-USB Adaptateur : Xbee USB 11293
+ 
+ Réalisera l’interface entre le PC moniteur et le module Xbee sur terre.
+- Module Xbee : Module Xbee série 2C XB24CZ7WIT-004
+- Accéléromètre / Gyroscope / Magnétomètre : Module 9 DoF MPU9250 Grove 101020080
+
+ La centrale inertielle nous permettra de connaître notre position dans l’espace, notamment pour l’orientation par rapport au nord. 
 - Girouette : Fait à la main
+ 
+ La girouette sera imprimée en résine et pourra tourner librement à l’aide d’un roulement à billes. Elle présentera un encodeur magnétique permettant de connaître l’orientation du vent sans freiner sa rotation. 
 
 ### 2.2. Architecture logicielle
+- C/C++
+ 
+ Le programme tournant sur le STM32 sera écrit en C.
+- Python
+ 
+ La collecte des données et l’affichage des logs s’effectuera en Python dans un premier temps.
+- HTML / CSS / Angular
+ 
+ Si le temps nous le permet, nous développerons une interface web pour l’affichage des données.
 
 ## 3. Équipe
 - **Louis Guibert** : Responsable de la validation produit et des tests
