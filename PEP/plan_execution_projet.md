@@ -62,7 +62,7 @@ Retour de commande + Debug / Test + charge de la batterie
  
  Nous avons décidé d'effectuer notre développement en suivant un cycle en V.
  
- ##### Tests unitaires
+ ##### 1.5.1. Tests unitaires
  
  Ces tests nous permettent d'effectuer des essais à terre de chaque modules:
  
@@ -89,7 +89,8 @@ Retour de commande + Debug / Test + charge de la batterie
   - Envoie de trames cohérentes
   - Bonne réception et interprétation des trame envoyées
  
-  ##### Tests d'intégration
+  ##### 1.5.2. Tests d'intégration
+ 
  Nous allons effectuer des tests fonctionnels, pour vérifier que les fonctions répondent aux éxigences.
 - Contrôle des servomoteurs en fonction des données recueillies
 - Correction de la dérive toutes les 2 secondes
@@ -99,7 +100,7 @@ Retour de commande + Debug / Test + charge de la batterie
 - Lecture du vent toutes les 2 secondes
 - Remontée les logs toutes les 2 secondes
  
- ##### Tests de validation
+ ##### 1.5.3. Tests de validation
  Dans cette phase, nous allons effectuer des tests limites de notre système.
 - Environnement de fonctionnement (exemple : Changement brutale de la force et/ou de la direction du vent)
 - Perte de communication (exemple : Distance de communication dépassée)
