@@ -59,13 +59,52 @@ Retour de commande + Debug / Test + charge de la batterie
 *<Définir les exigences opérationnelles de votre produit en quantifiant les objectifs à atteindre. Les clients utiliseront ces objectifs pour valider la conformité de votre produit (et votre projet). Organiser cette partie en identifiant de manière unique chaque exigence unitaire.>*
 
 ### 1.5. Plan de validation
- Essai à terre de chaque modules
-##### Tests fonctionnels
-- Commande servomoteur
-- 
-- Communication maquette / station au sol
-- Test unitaire 
-
+ 
+ Nous avons décidé d'effectuer notre développement en suivant un cycle en V.
+ 
+ ##### Tests unitaires
+ 
+ Ces tests nous permettent d'effectuer des essais à terre de chaque modules:
+ 
+ ###### Récupération des données :
+ - Trames GPS :
+  - Bonne réception des trames
+  - Trames correctes au niveau des données
+ 
+ - Sens du vent avec la girouette
+  - Récupération d'une donnée en degré correcte
+ 
+ - Orientation du magnétomètre :
+  - Récupération d'une donnée en degré correcte par rapport au pôle Nord
+ 
+ - Orientation du gyroscope :
+  - Récupération d'une donnée d'orientation sur 3 axes correcte
+ 
+ ###### Fonctionnement et précision des servomoteurs :
+ - Bonne récéption et interprétation des commandes envoyées
+ 
+  ###### Communications :
+ - Communication XBEE
+ - Communication RF
+  - Envoie de trames cohérentes
+  - Bonne réception et interprétation des trame envoyées
+ 
+  ##### Tests d'intégration
+ Nous allons effectuer des tests fonctionnels, pour vérifier que les fonctions répondent aux éxigences.
+- Contrôle des servomoteurs en fonction des données recueillies
+- Correction de la dérive toutes les 2 secondes
+- Communication et réception des données à terre
+- Passage en mode manuel à tout moment lors d'une défaillance importante ou lors d'un input utilisateur
+- Respect de la stratégie définie en cas de défaillance négligeable (exemple : un seul capteur défaillant, passage en mode dégradé)
+- Lecture du vent toutes les 2 secondes
+- Remontée les logs toutes les 2 secondes
+ 
+ ##### Tests de validation
+ Dans cette phase, nous allons effectuer des tests limites de notre système.
+- Environnement de fonctionnement (exemple : Changement brutale de la force et/ou de la direction du vent)
+- Perte de communication (exemple : Distance de communication dépassée)
+- Données érronée (exemple : trame GPS fausses)
+ 
 *<Définir votre plan de validation du produit pour démontrer que le produit répond bien aux attentes du client. Vous devez définir les procédures de test et les démonstrations d’usage prévus pour valider les exigences définies avant.>*
 
 ### 1.6. Fonctionnalités réutilisables
