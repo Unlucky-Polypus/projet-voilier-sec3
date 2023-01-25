@@ -8,8 +8,8 @@ void setup()
   gps_status = GPS_DISCONNECTED_WIRE;
   gps_reconecting_count = 0;
   Serial.begin(115200);
-  Wire.setSDA(PB7);
-  Wire.setSCL(PB6);
+  Wire.setSDA(PIN_SDA);
+  Wire.setSCL(PIN_SCL);
   Wire.begin();
 }
 
