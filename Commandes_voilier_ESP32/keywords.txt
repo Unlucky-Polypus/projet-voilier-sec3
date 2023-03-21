@@ -1,0 +1,6 @@
+	set_gouv	KEYWORD1
+	set_voile	KEYWORD1
+	cmd_gouv	KEYWORD1
+	cmd_voile	KEYWORD1
+
+	Commandes_voilier_ESP32	KEYWORD1
