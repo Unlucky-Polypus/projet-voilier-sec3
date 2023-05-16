@@ -12,7 +12,6 @@ class Imu_Voilier {
 
     int16_t angle_value;
     bool calibrated;
-    void read_calibration_status();
 
   public : 
 
@@ -21,4 +20,5 @@ class Imu_Voilier {
     int16_t imu_get_data();
     int16_t imu_get_data_with_negative();
     void imu_display_data();
+    bool read_calibration_status();
 };

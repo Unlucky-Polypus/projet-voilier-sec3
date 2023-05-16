@@ -143,12 +143,8 @@ void Gps_Voilier::gps_update_data()
       }
       break;
     case GPS_DISCONNECTED_WIRE:
-      if (myGNSS.begin() == false) //Connect to the Ublox module using Wire port
+      if (myGNSS.begin() != false) //Connect to the Ublox module using Wire port
       {
-        Serial.println(F("Error : Wire Disconnected"));
-        //delay(200);
-      }
-      else{
         gps_status = GPS_CONNECTED_NETWORK;
         gps_display_status();
       }

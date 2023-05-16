@@ -1,5 +1,7 @@
 #include <Wire.h> //This is for i2C
 
+#define ERROR_GIROUETTE_VALUE -1000
+
 /* ESP32 :
 SDA : 21
 SCL : 22
@@ -22,38 +24,35 @@ float previoustotalAngle = 0; //for the display printing
 
 void checkQuadrant();
 void checkMagnetPresence();
-void ReadRawAngle();
+bool ReadRawAngle();
 void correctAngle();
 
 void windSetup()
 {
-  Wire.begin(); //start i2C  
-  Wire.setClock(800000L); //fast clock
-
-  checkMagnetPresence(); //check the magnet (blocks until magnet is found)
-
-  ReadRawAngle(); //make a reading so the degAngle gets updated
-  startAngle = degAngle; //update startAngle with degAngle - for taring
+  // checkMagnetPresence(); //check the magnet (blocks until magnet is found)
+  // ReadRawAngle(); //make a reading so the degAngle gets updated
+  // startAngle = degAngle; //update startAngle with degAngle - for taring
+  Serial.println("hj");
 }
-
 
 int getWindAngle()
 {
-  ReadRawAngle(); //ask the value from the sensor
-  correctAngle(); //tare the value
-  checkQuadrant(); //check quadrant, check rotations, check absolute angular position
-   //wait a little - adjust it for "better resolution"
-
-
-  WindAngle = int(totalAngle) % 360; // angle correction from -angle/+angle to 0/360
-  if(WindAngle < 0) WindAngle = 360 - abs(WindAngle);
-  WindAngle = abs(WindAngle);
-
-  return WindAngle;
+  bool connected = ReadRawAngle(); //ask the value from the sensor
+  if(connected){
+    correctAngle(); //tare the value
+    checkQuadrant(); //check quadrant, check rotations, check absolute angular position
+    //wait a little - adjust it for "better resolution"
+    WindAngle = int(totalAngle) % 360; // angle correction from -angle/+angle to 0/360
+    if(WindAngle < 0) WindAngle = 360 - abs(WindAngle);
+    WindAngle = abs(WindAngle);
+    return WindAngle;
+  }
+  else{
+    return ERROR_GIROUETTE_VALUE;
+  }
 }
 
-
-void ReadRawAngle()
+bool ReadRawAngle()
 { 
   //7:0 - bits
   Wire.beginTransmission(WindAddress); //connect to the sensor
@@ -61,40 +60,51 @@ void ReadRawAngle()
   Wire.endTransmission(); //end transmission
   Wire.requestFrom(WindAddress, 1); //request from the sensor
   
-  while(Wire.available() == 0); //wait until it becomes available 
-  lowbyte = Wire.read(); //Reading the data after the request
- 
-  //11:8 - 4 bits
-  Wire.beginTransmission(WindAddress);
-  Wire.write(0x0C); //figure 21 - register map: Raw angle (11:8)
-  Wire.endTransmission();
-  Wire.requestFrom(WindAddress, 1);
+  unsigned long start_time = millis();
+  while(Wire.available() == 0 && (millis() - start_time) < 100);  
+  if(Wire.available() > 0){
+    lowbyte = Wire.read(); //Reading the data after the request
   
-  while(Wire.available() == 0);  
-  highbyte = Wire.read();
-  
-  //4 bits have to be shifted to its proper place as we want to build a 12-bit number
-  highbyte = highbyte << 8; //shifting to left
-  //What is happening here is the following: The variable is being shifted by 8 bits to the left:
-  //Initial value: 00000000|00001111 (word = 16 bits or 2 bytes)
-  //Left shifting by eight bits: 00001111|00000000 so, the high byte is filled in
-  
-  //Finally, we combine (bitwise OR) the two numbers:
-  //High: 00001111|00000000
-  //Low:  00000000|00001111
-  //      -----------------
-  //H|L:  00001111|00001111
-  rawAngle = highbyte | lowbyte; //int is 16 bits (as well as the word)
+    //11:8 - 4 bits
+    Wire.beginTransmission(WindAddress);
+    Wire.write(0x0C); //figure 21 - register map: Raw angle (11:8)
+    Wire.endTransmission();
+    Wire.requestFrom(WindAddress, 1);
+    start_time = millis();
+    while(Wire.available() == 0 && (millis() - start_time) < 100);  
+    if(Wire.available() > 0){ 
+      highbyte = Wire.read();
+      
+      //4 bits have to be shifted to its proper place as we want to build a 12-bit number
+      highbyte = highbyte << 8; //shifting to left
+      //What is happening here is the following: The variable is being shifted by 8 bits to the left:
+      //Initial value: 00000000|00001111 (word = 16 bits or 2 bytes)
+      //Left shifting by eight bits: 00001111|00000000 so, the high byte is filled in
+      
+      //Finally, we combine (bitwise OR) the two numbers:
+      //High: 00001111|00000000
+      //Low:  00000000|00001111
+      //      -----------------
+      //H|L:  00001111|00001111
+      rawAngle = highbyte | lowbyte; //int is 16 bits (as well as the word)
 
-  //We need to calculate the angle:
-  //12 bit -> 4096 different levels: 360° is divided into 4096 equal parts:
-  //360/4096 = 0.087890625
-  //Multiply the output of the encoder with 0.087890625
-  degAngle = rawAngle * 0.087890625; 
-  
-  //Serial.print("Deg angle: ");
-  //Serial.println(degAngle, 2); //absolute position of the encoder within the 0-360 circle
-  
+      //We need to calculate the angle:
+      //12 bit -> 4096 different levels: 360° is divided into 4096 equal parts:
+      //360/4096 = 0.087890625
+      //Multiply the output of the encoder with 0.087890625
+      degAngle = rawAngle * 0.087890625; 
+      
+      //Serial.print("Deg angle: ");
+      //Serial.println(degAngle, 2); //absolute position of the encoder within the 0-360 circle
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  else{
+    return false;
+  }
 }
 
 void correctAngle()

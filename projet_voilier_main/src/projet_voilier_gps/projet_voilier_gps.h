@@ -10,20 +10,6 @@
 #define WARNING_CANNOT_GET_NEW_PVT -2
 #define GPS_DATA_GET_SUCCESS 0
 
-#define STM_MODE 1
-#define ESP_MODE 2
-#define GLOBAL_MODE STM_MODE
-
-#ifdef GLOBAL_MODE
-  #if GLOBAL_MODE == STM_MODE
-    #define PIN_SDA PB7
-    #define PIN_SCL PB6
-  #elif GLOBAL_MODE == ESP_MODE
-    #define PIN_SDA 22
-    #define PIN_SCL 21
-  #endif
-#endif
-
 struct GPS_DATA {
     int32_t latitude;
     int32_t longitude;

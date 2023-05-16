@@ -30,9 +30,11 @@ void cmd_gouv(int cmd_g){
   //90 50%
   
   // test valeur bien comprise entre 0 et 100
-  assert(0 <= cmd_g && cmd_g <= 100);
+  if(0 <= cmd_g && cmd_g <= 100){
+    gouvernail.write(map(cmd_g, 0, 100, 50, 130));
+  }
   // envoie commande au servo
-  gouvernail.write(map(cmd_g, 0, 100, 50, 130));
+
 }
 
 void cmd_voile(int cmd_v){
@@ -40,8 +42,8 @@ void cmd_voile(int cmd_v){
   //43 0%
   //115 100%
   // test valeur bien comprise entre 0 et 100
-  assert(0 <= cmd_v && cmd_v <= 100);
-  
-  voile.writeMicroseconds(map(cmd_v, 0, 100,1190,1780));
+  if(0 <= cmd_v && cmd_v <= 100){
+    voile.writeMicroseconds(map(cmd_v, 0, 100,1190,1780));  
+  }
   //voile.write(map(cmd_v, 0, 100, 44, 115));
 }
