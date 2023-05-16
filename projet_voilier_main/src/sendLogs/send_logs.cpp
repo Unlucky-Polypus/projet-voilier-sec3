@@ -1,8 +1,11 @@
-#include "send_logs.h"
+#include "SendLogs.h"
 
-void sendLogs::begin()
+SendLogs::SendLogs()
 {
   Serial.begin(38400);
+  _GPS_STATUS = 1;
+  _IMU_STATUS = 1;
+  _GIR_STATUS = 1;
 
   // DOIT ETRE PRESENT SUR LE MAIN //
   /*Wire.setSDA(PIN_SDA);
@@ -11,7 +14,15 @@ void sendLogs::begin()
   gps = new Gps_Voilier();*/
 }
 
-void printDouble( double val, unsigned int precision){
+void SendLogs::setStatusSensors(bool S_IMU, bool S_GPS, bool S_GIR)
+{
+  _IMU_STATUS = S_IMU;
+  _GPS_STATUS = S_GPS;
+  _GIR_STATUS = S_GIR;
+  
+}
+
+void SendLogs::printDouble( double val, unsigned int precision){
 // prints val with number of decimal places determine by precision
 // NOTE: precision is 1 followed by the number of zeros for the desired number of decimial places
 // example: printDouble( 3.1415, 100); // prints 3.14 (two decimal places)
@@ -33,72 +44,49 @@ void printDouble( double val, unsigned int precision){
     Serial.print(frac,DEC) ;
 }
 
-void sendLogs(float GPS_lat, 
+void SendLogs::sendLogs(float GPS_lat, 
               float GPS_long,
               float IMU_degNord,
-              float IMU_comp_x,
-              float IMU_comp_y,
-              float IMU_comp_z,
-              float IMU_gyr_x,
-              float IMU_gyr_y,
-              float IMU_gyr_z,
-              float IMU_acc_x,
-              float IMU_acc_y,
-              float IMU_acc_z,
               float GIR_degVent
               )
 {
-  //latitude  = float(gps->gps_data.latitude)/10000000;  - A AJOUTER SUR CODE PRINCIPAL
-  //longitude = float(gps->gps_data.longitude)/10000000; - A AJOUTER SUR CODE PRINCIPAL
+  //latitude  = float(gps->gps_data.latitude)/10000000;
+  //longitude = float(gps->gps_data.longitude)/10000000;
 
   Serial.println("SOF");
-  Serial.println("\"GPS\":");
-  Serial.print("{\"latitude\" : ");
-  printDouble(GPS_lat,100000);
-  Serial.print(", \"longitude\" : ");
-  printDouble(GPS_long,100000);
+
+  Serial.println("\"SENSORS STATUS\" :");
+  Serial.print("{\"GPS\" : ");
+  Serial.print(_GPS_STATUS);
+  Serial.print(", \"IMU\" : ");
+  Serial.print(_IMU_STATUS);
+  Serial.print(", \"GIR\" : ");
+  Serial.print(_GIR_STATUS);
   Serial.println("},");
 
-  Serial.println("\"IMU\": [");
-
-  Serial.println("{\"Compas\":");
-  Serial.print("{\"x\" : ");
-  printDouble(IMU_comp_x,1000);
-  Serial.print(", \"y\" : ");
-  printDouble(IMU_comp_y,1000);
-  Serial.print(", \"z\" : ");
-  printDouble(IMU_comp_z,1000);
-  Serial.println("}},");
-
-  Serial.println("{\"Gyroscope\":");
-  Serial.print("{\"x\" : ");
-  printDouble(IMU_gyr_x,100000);
-  Serial.print(", \"y\" : ");
-  printDouble(IMU_gyr_y,100000);
-  Serial.print(", \"z\" : ");
-  printDouble(IMU_gyr_z,100000);
-  Serial.println("}},");
-
-  Serial.println("{\"Acceleration\":");
-  Serial.print("{\"x\" : ");
-  printDouble(IMU_acc_x,100);
-  Serial.print(", \"y\" : ");
-  printDouble(IMU_acc_y,100);
-  Serial.print(", \"z\" : ");
-  printDouble(IMU_acc_z,100);
-  Serial.println("}},");
-
-  Serial.print("{\"degNord\": ");
-  printDouble(IMU_degNord,1000);
-  Serial.println("}");
-
-  Serial.println("],");
-
-  Serial.println("\"GIROUETTE\":");
-  Serial.print("{\"degVent\": ");
-  printDouble(GIR_degVent,1000000);
-  Serial.println("}");
-
+  if(_GPS_STATUS) {
+    Serial.println("\"GPS\" :");
+    Serial.print("{\"latitude\" : ");
+    printDouble(GPS_lat/10000000,100000);
+    Serial.print(", \"longitude\" : ");
+    printDouble(GPS_long/10000000,100000);
+    Serial.println("},");
+  }
+  
+  if(_IMU_STATUS) {
+    Serial.println("\"IMU\" :");
+    Serial.print("{\"degNord\" : ");
+    printDouble(IMU_degNord,1000);
+    Serial.println("}");
+  }
+  
+  if(_GIR_STATUS) {
+    Serial.println("\"GIROUETTE\":");
+    Serial.print("{\"degVent\": ");
+    printDouble(GIR_degVent,1000000);
+    Serial.println("}");
+  }
+  
   Serial.println("EOF");
   Serial.flush();
   Serial.println("");
