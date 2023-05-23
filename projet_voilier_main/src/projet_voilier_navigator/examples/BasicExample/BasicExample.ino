@@ -21,5 +21,11 @@ void loop() {
   Serial.print(commands.safran, 2);
   Serial.print(", Sails output : ");
   Serial.println(commands.sails, 2);
-  delay(1000);
+  // Check if the boat is at the buoy coordinate, precision is in meters
+  if (arrived(2)) {
+    Serial.printl("Arrived !");
+  } else {
+    Serial.println("Not arrived");
+  }
+  delay(2000);
 }
