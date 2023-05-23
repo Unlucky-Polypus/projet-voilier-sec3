@@ -143,6 +143,27 @@ float Navigator::adjust_traj(float new_course) {
   return (course_diff + 180) * 100 / 360;
 }
 
+// Retourne vrai si le bateau est à la position de la bouée modulo la précision (en mètres)
+bool Navigator::arrived(float precision) {
+  float lat_boat = radians(this->position.lat);
+  float long_boat = radians(this->position.lon);
+  float lat_buoy = radians(this->buoy.lat);
+  float long_buoy = radians(this->buoy.lon);
+  float delta_lat = lat_buoy - lat_boat;
+  float delta_long = long_buoy - long_boat;
+
+  float a = pow(sin(delta_lat / 2), 2) + cos(lat_boat) * cos(lat_buoy) * pow(sin(delta_long / 2), 2);
+
+  float distance =  2 * 6371000 * atan2(sqrt(a), sqrt(1 - a));
+
+  if (distance <= precision) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 
 
 
