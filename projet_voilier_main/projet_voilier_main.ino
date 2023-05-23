@@ -2,7 +2,6 @@
 #include "src/projet_voilier_commandes_servo/projet_voilier_commandes_servo.h"
 #include "src/projet_voilier_girouette/projet_voilier_girouette.h"
 #include "src/projet_voilier_imu/projet_voilier_imu.h"
-#include "src/sendLogs/send_logs.h"
 
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
@@ -31,52 +30,45 @@ Gps_Voilier* gps;
 int girouette_value; 
 
 void get_sensor_data(){
-  //GET GPS
+  // //GET GPS
   gps->gps_update_data();
 
-  //GET GIROUETTE
+  // //GET GIROUETTE
   girouette_value = getWindAngle();
 
   //GET IMU
-  if(imu_is_ready == true){
-    imu->imu_update_data();
-  }
-  else{
-    imu_is_ready = imu->read_calibration_status();
-  }
+  imu->imu_update_data();
+
 }
 
 void send_data(){
 
-  //GPS
+  // //GPS
   if(gps->gps_get_status() == GPS_CONNECTED_NETWORK){
     Serial.print("SEND GPS data : ");
     gps->gps_display_data();
     Serial.print("\n");
   }
   else{
-    Serial.println("SEND Error GPS");
+    gps->gps_display_status();
   }
 
-  //GIROUETTE 
+  // //GIROUETTE 
   if(girouette_value != ERROR_GIROUETTE_VALUE){
     Serial.print("Valeur de la girouette : ");
     Serial.print(girouette_value);
     Serial.print("\n");
+    //send xbee giroueette
   }
   else{
     Serial.println("SEND Error Girouette");
   }
 
   //IMU
-  if(imu_is_ready){
-    Serial.print("SEND IMU VALUE : ");
-    imu->imu_get_data_with_negative();
-    Serial.print("\n");
-  }
-  else{
-    Serial.println("SEND Error IMU");
-  }
+  Serial.print("SEND IMU VALUE : ");
+  Serial.print(imu->imu_get_data_with_negative());
+  Serial.print("\n");
+  //send wbee imu
 
 }
 
@@ -108,10 +100,9 @@ void setup() {
 void loop() {
 
   get_sensor_data();
-  Serial.println("Bonjour");
   send_data();
   //triggerFunctionKeepAlive();
-  delay(100);
+  delay(50);
 
   //Serial.println(getWindAngle());
 
