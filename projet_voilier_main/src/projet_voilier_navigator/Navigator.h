@@ -42,6 +42,7 @@ class Navigator {
     Navigator(Point buoy);
     void setBuoy(Point buoy);
     CommandOutput navigate(Point boat, float wind_angle, float course);
+    bool arrived(float precision);
 };
 
 #endif
