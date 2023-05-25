@@ -17,9 +17,6 @@ struct GPS_DATA {
     byte SIV;
 };
 
-enum {GPS_CONNECTED_NETWORK, GPS_DISCONNECTED_NETWORK, 
-      GPS_TRYING_RECONNECTING_WIRE, GPS_TRYING_CONNECTING_WIRE, GPS_DISCONNECTED_WIRE };
-
 class Gps_Voilier {
 
   public : 
@@ -28,14 +25,13 @@ class Gps_Voilier {
     GPS_DATA gps_data;
     byte gps_status;
     byte gps_reconecting_count;
+    bool booted;
 
     int update_data_gps();
 
     Gps_Voilier();
-    void gps_update_data();
     void gps_display_data();
-    void gps_display_status();
-    byte gps_get_status();
     GPS_DATA gps_get_data();
+    bool gps_update_status();
 
 };

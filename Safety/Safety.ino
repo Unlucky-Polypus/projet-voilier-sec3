@@ -4,17 +4,20 @@
 
 int state = 0;
 
-//Pin keepAlive = 4
-const int KeepAlivepin = 4;
+//Pin keepAlive = 8
+const int KeepAlivepin = 8;
 
-//Pin PWM
-const int PWMpin = 5;
+//Pin PWM = 10
+const int PWMpin = 10;
 
-//PIN Reset
-const int RESETpin = 14;
+//PIN Reset = 9
+const int RESETpin = 9;
 
-//switch PIN
-const int SWITCHpin = 27;
+//switch PIN = 2
+const int SWITCHpin = 2;
+
+//Mode = 5 (0 : Auto , Manuel : 1)
+const int MODEpin = 5;
 
 unsigned long current_Time;
 unsigned long Time_since_alive = 0;
@@ -45,6 +48,9 @@ void setup() {
   pinMode(RESETpin, OUTPUT);
   digitalWrite(RESETpin, HIGH);
 
+  //Mode
+  pinMode(MODEpin, OUTPUT);
+
   //SWITCH
   pinMode(SWITCHpin, OUTPUT);
 
@@ -57,15 +63,17 @@ void setup() {
 
   //Démarage mode AUTO
   state = AUTO;
-  // low for auto
-  digitalWrite(SWITCHpin, HIGH);
+  //LOW for auto
+  digitalWrite(SWITCHpin, LOW);
+  //LOW for auto
+  digitalWrite(MODEpin, LOW);
   Serial.println("Mode : AUTO setup");
 }
 
 void loop() {
   switch (state) {
     case AUTO:
-      // si récéption de KeepAlive (PIN a 1) => reset du temps écoulé depusi dernier KeepAlive
+      // si récéption de KeepAlive (PIN a 1) => reset du temps écoulé depuis dernier KeepAlive
       if ((digitalRead(KeepAlivepin) == 1) && ((millis() - Time_since_check) > 200)) {
         Time_since_alive = millis();
         Time_since_check = millis();
@@ -77,16 +85,21 @@ void loop() {
       // si le temps écoulé depuis le dernier keepAlive est supérieur à 2sec * 3 => mode Manuel
       if (current_Time - Time_since_alive >= 6000) {
         Serial.println("Mode : MANUEL plus de KeepAlive");
-        // high for manuel
+        ///////// PLUS DE RESET /////////
+        //state = MANUEL_KEEPALIVE;
+        //HIGH for manuel
         digitalWrite(SWITCHpin, HIGH);
-        state = MANUEL_KEEPALIVE;
+        //HIGH for manuel
+        digitalWrite(MODEpin, HIGH);
       }
       //ENFIN (ordre de priorité) si signal télécommande MANUEL
       if (signalDetected && (900 <= PWM_duration) && (PWM_duration <= 1100)) {
         Serial.println("Mode : MANUEL Telecommande");
-        // high for manuel
-        digitalWrite(SWITCHpin, HIGH);
         state = MANUEL_TELECOMMANDE;
+        //HIGH for manuel
+        digitalWrite(SWITCHpin, HIGH);
+        //HIGH for manuel
+        digitalWrite(MODEpin, HIGH);
       }
       break;
     case MANUEL_TELECOMMANDE:
@@ -95,9 +108,11 @@ void loop() {
         Serial.println("Mode : AUTO Telecommande");
         //reset KeepAlive
         Time_since_alive = millis();
-        // low for auto
-        digitalWrite(SWITCHpin, LOW);
         state = AUTO;
+        //LOW for auto
+        digitalWrite(SWITCHpin, LOW);
+        //LOW for auto
+        digitalWrite(MODEpin, LOW);
       }
       break;
     case MANUEL_KEEPALIVE:
@@ -110,15 +125,19 @@ void loop() {
       //reset KeepAlive
       Time_since_alive = millis();
       Serial.println("Mode : AUTO après reset");
-      // low for auto
-      digitalWrite(SWITCHpin, LOW);
       state = AUTO;
+      //LOW for auto
+      digitalWrite(SWITCHpin, LOW);
+      //LOW for auto
+      digitalWrite(MODEpin, LOW);
       break;
     default:
       Serial.println("Mode : AUTO Par defaut");
-      // low for auto
-      digitalWrite(SWITCHpin, LOW);
       state = AUTO;
+      //LOW for auto
+      digitalWrite(SWITCHpin, LOW);
+      //LOW for auto
+      digitalWrite(MODEpin, LOW);
       break;
   }
 }
