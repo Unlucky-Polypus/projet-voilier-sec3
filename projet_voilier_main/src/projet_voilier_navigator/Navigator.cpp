@@ -114,7 +114,7 @@ float Navigator::adjust_sail(float azimuth) {
       sail_angle = 35;
   // Au près
   } else if(abs_wind_angle > 35) {
-      sail_angle = 20;
+      sail_angle = 15;
   // Vent de face
   } else {
     sail_angle = 90;
@@ -128,7 +128,7 @@ float Navigator::adjust_sail(float azimuth) {
 // La commande est proportionelle à la différecence de trajectoire
 float Navigator::adjust_traj(float new_course) {
   float course_diff = new_course - this->course;
-  return (course_diff + 180) * 100 / 360;
+  return (abs(course_diff + 180)) * 100 / 360;
 }
 
 bool Navigator::arrived(float precision) {
@@ -149,3 +149,4 @@ bool Navigator::arrived(float precision) {
     return false;
   }
 }
+
