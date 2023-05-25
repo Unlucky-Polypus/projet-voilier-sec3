@@ -114,7 +114,11 @@ float Navigator::adjust_sail(float azimuth) {
       sail_angle = 35;
   // Au près
   } else if(abs_wind_angle > 35) {
+<<<<<<< HEAD
       sail_angle = 15;
+=======
+      sail_angle = 20;
+>>>>>>> 2ae60d9 (Readme + modification sail orientation)
   // Vent de face
   } else {
     sail_angle = 90;
@@ -149,4 +153,7 @@ bool Navigator::arrived(float precision) {
     return false;
   }
 }
+
+
+
 
