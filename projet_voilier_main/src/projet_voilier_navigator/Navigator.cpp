@@ -111,28 +111,16 @@ float Navigator::adjust_sail(float azimuth) {
     }
   // Vent de travers
   } else if(abs_wind_angle > 80) {
-    if (wind_angle >= 0) {
-      sail_angle = 140;
-    } else {
-      sail_angle = -140;
-    }
+      sail_angle = 35;
   // Au près
   } else if(abs_wind_angle > 35) {
-    if (wind_angle >= 0) {
-      sail_angle = -165;
-    } else {
-      sail_angle = 165;
-    }
+      sail_angle = 20;
   // Vent de face
   } else {
-    if (wind_angle >= 0) {
-      sail_angle = -90;
-    } else {
-      sail_angle = 90;
-    }
+    sail_angle = 90;
   }
   // On retourne le pourcentage de la PWM associé à l'angle de la voile voilu
-  return abs(recalibrate_angle_180(sail_angle + 180)) * 100 / 90;
+  return abs(sail_angle) * 100 / 90;
 }
 
 
@@ -143,7 +131,6 @@ float Navigator::adjust_traj(float new_course) {
   return (course_diff + 180) * 100 / 360;
 }
 
-// Retourne vrai si le bateau est à la position de la bouée modulo la précision (en mètres)
 bool Navigator::arrived(float precision) {
   float lat_boat = radians(this->position.lat);
   float long_boat = radians(this->position.lon);
@@ -162,8 +149,3 @@ bool Navigator::arrived(float precision) {
     return false;
   }
 }
-
-
-
-
-
