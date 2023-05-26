@@ -2,11 +2,15 @@
 #include "src/projet_voilier_commandes_servo/projet_voilier_commandes_servo.h"
 #include "src/projet_voilier_girouette/projet_voilier_girouette.h"
 #include "src/projet_voilier_imu/projet_voilier_imu.h"
-#include "src/sendLogs/send_logs.h"
+#include "src/sendLogs/SendLogs.h"
 
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+//#include "freertos/task.h"
+
+//Espace dédié au logs
+SendLogs comXbee;
+bool Etat_GPS, Etat_IMU, Etat_Gir = 1; // 0 = KO, 1 = OK
 
 //Espace dédié au controle moteur
 const uint8_t pin_keepAlive = 8;
@@ -23,6 +27,7 @@ void triggerFunctionKeepAlive() {
 //Espace dédié à l'imu 
 Imu_Voilier* imu;
 bool imu_is_ready;
+float imu_data;
 
 //Espace dédié au GPS
 Gps_Voilier* gps;
@@ -53,9 +58,11 @@ void send_data(){
     Serial.print("SEND GPS data : ");
     gps->gps_display_data();
     Serial.print("\n");
+    Etat_GPS = 1;
   }
   else{
     Serial.println("SEND Error GPS");
+    Etat_GPS = 0;
   }
 
   //GIROUETTE 
@@ -63,19 +70,23 @@ void send_data(){
     Serial.print("Valeur de la girouette : ");
     Serial.print(girouette_value);
     Serial.print("\n");
+    Etat_Gir = 1;
   }
   else{
     Serial.println("SEND Error Girouette");
+    Etat_Gir = 0;
   }
 
   //IMU
   if(imu_is_ready){
     Serial.print("SEND IMU VALUE : ");
-    imu->imu_get_data_with_negative();
+    imu_data = float(imu->imu_get_data_with_negative());
     Serial.print("\n");
+    Etat_IMU = 1;
   }
   else{
     Serial.println("SEND Error IMU");
+    Etat_IMU = 0;
   }
 
 }
@@ -85,7 +96,7 @@ void do_action(){
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(38400);
   pinMode(pin_keepAlive, OUTPUT);
   digitalWrite(pin_keepAlive, LOW);
   Wire.begin(); 
@@ -103,6 +114,9 @@ void setup() {
   //Initialisation des variables
   imu_is_ready = false;
   girouette_value = ERROR_GIROUETTE_VALUE;
+  Etat_GPS = 1;
+  Etat_IMU = 1;
+  Etat_Gir = 1;
 }
 
 void loop() {
@@ -110,6 +124,9 @@ void loop() {
   get_sensor_data();
   Serial.println("Bonjour");
   send_data();
+  comXbee.setStatusSensors(Etat_GPS,Etat_IMU,Etat_Gir);
+  comXbee.sendLogs(float(gps->gps_data.latitude), float(gps->gps_data.longitude), imu_data, float(girouette_value));
+  
   //triggerFunctionKeepAlive();
   delay(100);
 

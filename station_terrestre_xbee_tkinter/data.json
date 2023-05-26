@@ -1,14 +1,7 @@
-{"GPS":
-{"latitude" : 47.24873, "longitude" : -1.54867},
-"GROVE": [
-{"Compas":
-{"x" : 2.583, "y" : -4.439, "z" : 0.435}},
-{"Gyroscope":
-{"x" : 2.56433, "y" : -4.45352, "z" : 0.47237}},
-{"Acceleration":
-{"x" : 0.28, "y" : 0.01, "z" : 0.93}},
-{"degNord": 47.743}
-],
+{"SYSTEM STATUS" :
+{"GPS" : 0, "IMU" : 1, "GIR" : 1, "MODE" : 0},
+"IMU" :
+{"degNord" : -66.300},
 "GIROUETTE":
-{"degVent": 76.463890}
+{"degVent": 174.000000}
 }

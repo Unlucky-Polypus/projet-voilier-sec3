@@ -18,9 +18,9 @@ simulate_moving_boat = 0 # simulate the moving boat
 
 device = serial.Serial()
 device.baudrate = 38400
-device.port = 'COM3'
+if(simulate_moving_boat == 0) : device.port = 'COM10'
 print(device.name)
-device.open()
+if(simulate_moving_boat == 0) : device.open()
 
 # création de l'objet logger qui va nous servir à écrire dans les logs
 logger = logging.getLogger()
@@ -90,7 +90,10 @@ class App(customtkinter.CTk):
         self.last_long = 0.0
         self.last_wind = 0.0
         self.last_compas = 0.0
-        self.speed_var = customtkinter.StringVar()
+        self.IMU_STATUS = customtkinter.StringVar()
+        self.GPS_STATUS = customtkinter.StringVar()
+        self.GIR_STATUS = customtkinter.StringVar()
+        self.MODE_STATUS = customtkinter.StringVar()
         self.compas_var = customtkinter.StringVar()
         self.wind_dir_var = customtkinter.StringVar()
 
@@ -113,31 +116,24 @@ class App(customtkinter.CTk):
 
         self.frame_left.grid_rowconfigure(2, weight=1)
 
-        # self.button_1 = customtkinter.CTkButton(master=self.frame_left,
-        #                                         text="Set Marker",
-        #                                         command=self.set_marker_event)
-        # self.button_1.grid(pady=(20, 0), padx=(20, 20), row=0, column=0)
 
+        self.label_MODE = customtkinter.CTkLabel(self.frame_left, textvariable=self.MODE_STATUS, anchor="w")
+        self.label_MODE.grid(pady=(0, 0), padx=(30, 30), row=0, column=0)
 
+        self.label_IMU = customtkinter.CTkLabel(self.frame_left, textvariable=self.IMU_STATUS, anchor="w")
+        self.label_IMU.grid(pady=(60, 0), padx=(30, 30), row=0, column=0)
 
+        self.label_GPS = customtkinter.CTkLabel(self.frame_left, textvariable=self.GPS_STATUS, anchor="w")
+        self.label_GPS.grid(pady=(120, 0), padx=(30, 30), row=0, column=0)
 
-        self.label_speed = customtkinter.CTkLabel(self.frame_left, textvariable=self.speed_var, anchor="w")
-        self.label_speed.grid(pady=(0, 0), padx=(20, 20), row=0, column=0)
+        self.label_GIR = customtkinter.CTkLabel(self.frame_left, textvariable=self.GIR_STATUS, anchor="w")
+        self.label_GIR.grid(pady=(180, 0), padx=(30, 30), row=0, column=0)
+
+        self.label_wind = customtkinter.CTkLabel(self.frame_left, textvariable=self.wind_dir_var, anchor="w")
+        self.label_wind.grid(pady=(240, 0), padx=(30, 30), row=0, column=0)
 
         self.label_compas = customtkinter.CTkLabel(self.frame_left, textvariable=self.compas_var, anchor="w")
-        self.label_compas.grid(pady=(50, 0), padx=(20, 20), row=0, column=0)
-
-        self.label_wind_dir = customtkinter.CTkLabel(self.frame_left, textvariable=self.wind_dir_var, anchor="w")
-        self.label_wind_dir.grid(pady=(100, 0), padx=(20, 20), row=0, column=0)
-
-
-
-        #self.navigation_frame_label.image = image3
-
-        #canvas_obj = self.canvas.create_image(250, 250, image=tkimage)
-        #c.grid(pady=(50, 0), padx=(20, 20), row=1, column=0)
-
-        #self.create_circle(26, 26, 20, c)
+        self.label_compas.grid(pady=(300, 0), padx=(30, 30), row=0, column=0)
 
 
         self.map_label = customtkinter.CTkLabel(self.frame_left, text="Map Type:", anchor="w")
@@ -218,13 +214,13 @@ class App(customtkinter.CTk):
 
     def add_marker_event(self,coords):
         print("c'est encore un nouveau marqueur :", coords)
-        new_marker = self.map_widget.set_marker(coords[0], coords[1], text="c'est encore un nouveau marqueur")
+        new_marker = self.map_widget.set_marker(coords, coords[1], text="c'est encore un nouveau marqueur")
         self.marker_list.append(new_marker)
         self.scrollable_checkbox_frame.add_item( "Marker " + str(new_marker.position))
 
     def set_marker_from_address_event(self):
         current_position = convert_address_to_coordinates(self.entry.get()) #self.map_widget_search.get_position()
-        new_marker = self.map_widget.set_marker(current_position[0], current_position[1])
+        new_marker = self.map_widget.set_marker(current_position, current_position[1])
         self.marker_list.append(new_marker)
         self.scrollable_checkbox_frame.add_item( "Marker " + str(new_marker.position))
 
@@ -259,7 +255,7 @@ class App(customtkinter.CTk):
 
         markerConfigWindow = customtkinter.CTkToplevel(self)
         markerConfigWindow.title("markerConfigWindow")
-        markerConfigWindow.geometry("400x600")
+        markerConfigWindow.geometry("600x800")
 
         self.scrollable_checkbox_frame = ScrollableCheckBoxFrame(master=markerConfigWindow, width=300, command=self.checkbox_frame_event,
                                                                  item_list=[f"item {i}" for i in range(0)])
@@ -282,100 +278,114 @@ class App(customtkinter.CTk):
     def thread_run(self,a):
         x = ""
         while 1:
-            while device.in_waiting:
-                # WRITING JSON
-                mes = ""
-                try :
-                    mes = device.readline().decode("utf-8")
-                except UnicodeDecodeError:
-                    print("reset board")
-                #print(str(mes))
-
-                if "SOF" in mes:
-                    x = ""
+            if(simulate_moving_boat == 0) :
+                while device.in_waiting:
+                    # WRITING JSON
+                    mes = ""
                     try :
                         mes = device.readline().decode("utf-8")
                     except UnicodeDecodeError:
                         print("reset board")
+                        #print(str(mes))
 
-                if not "EOF" in mes and not "SOF" in mes:
-                    x = str(x) + mes
+                    if "SOF" in mes:
+                        x = ""
+                        try :
+                            mes = device.readline().decode("utf-8")
+                        except UnicodeDecodeError:
+                            print("reset board")
+                            
 
-                elif "EOF" in mes:
-                    x = "{"+x+"}"
-                    f = open("data.json", mode="w", newline='')
-                    f.write(x)
-                    f.close
-                    x = ""
+                    if not "EOF" in mes and not "SOF" in mes:
+                        x = str(x) + mes
+                        print(str(mes))
 
-                    # UPDATING UI
-                    try :
-                        f = open("data.json", "r")
-                        jsonContent = f.read()
-                        objJson = json.loads(jsonContent)
+                    elif "EOF" in mes:
+                        print(str(mes))
+                        x = "{"+x+"}"
+                        f = open("data.json", mode="w", newline='')
+                        f.write(x)
+                        f.close
+                        x = "" 
 
-                        if simulate_moving_boat :
-                            objJson['GPS']['latitude'] -= 0.000005
-                            objJson['GPS']['speed'] = 10 + round(random.uniform(0,0.5),4)
-                            objJson['GIROUETTE']['degVent'] = round(random.uniform(0,35),0)
-                            objJson2 = json.dumps(objJson, indent=3)
-                            with open("data.json", "w") as outfile:
-                                outfile.write(objJson2)
+                        background = Image.new(mode="RGBA", size=(200,200))
+                        image = Image.open("upcompas.png").resize((150,150), Image.LANCZOS)
+                        x, y = image.size
+                        background.paste(image, (25,25,x+25,y+25), image)
 
-                        if (self.last_lat != objJson['GPS']['latitude']) | (self.last_long != objJson['GPS']['longitude']): # boat marker update
+                        image3 = Image.open("wind_arrow2.png").rotate(self.last_wind-90).resize((200,200), Image.LANCZOS)
+                        image3 = image3.transpose(Image.FLIP_LEFT_RIGHT)
+                        x, y = image3.size
+                        background.paste(image3, (0, -2,x,y-2), image3)
 
-                            # try:
-                            #     self.boatmarker.delete()
-                            # except AttributeError:
-                            #     pass
-                            self.last_lat = objJson['GPS']['latitude']
-                            self.last_long = objJson['GPS']['longitude']
+                        image2 = Image.open("arrow2.png").rotate(self.last_compas).resize((110,110), Image.LANCZOS)
+                        image2 = image2.transpose(Image.FLIP_LEFT_RIGHT)
+                        x, y = image2.size
+                        background.paste(image2, (45, 45,x+45,y+45), image2)  
+                        
+                        background.save('newimg.png',"PNG")
+                        image5 = Image.open("newimg.png")
 
-                            self.boatmarker.set_position(objJson['GPS']['latitude'], objJson['GPS']['longitude'])
+                        self.logo_image = customtkinter.CTkImage(image5, size=(150, 150))
+                        self.navigation_frame_label = customtkinter.CTkLabel(self.frame_left,text="", image=self.logo_image,compound="left" )
+                        self.navigation_frame_label.grid(pady=(50, 0), padx=(20, 20), row=1, column=0)
+        
+                        # UPDATING UI
+                        try :
+                            f = open("data.json", "r")
+                            jsonContent = f.read()
+                            objJson = json.loads(jsonContent)
 
-                            time.sleep(0.1)
+                            if simulate_moving_boat :
+                                objJson['GPS']['latitude'] -= 0.000005
+                                objJson['IMU']['degNord'] += 1 #= round(random.uniform(0,90),4)
+                                objJson['IMU']['degNord'] %=360
+                                objJson['GIROUETTE']['degVent'] -= 1 #= round(random.uniform(0,90),0)
+                                objJson['GIROUETTE']['degVent'] %= 360
+                                objJson2 = json.dumps(objJson, indent=3)
+                                with open("data.json", "w") as outfile:
+                                    outfile.write(objJson2)
+
+                            
+
+                            self.MODE_STATUS.set("MODE : Manuel" if objJson['SYSTEM STATUS']['MODE'] == 1 else "MODE : Auto")
+                            self.IMU_STATUS.set("IMU STATUS : OK" if objJson['SYSTEM STATUS']['IMU'] == 1 else "IMU STATUS : KO")
+                            self.GPS_STATUS.set("GPS STATUS : OK" if objJson['SYSTEM STATUS']['GPS'] == 1 else "GPS STATUS : KO")
+                            self.GIR_STATUS.set("GIR STATUS : OK" if objJson['SYSTEM STATUS']['GIR'] == 1 else "GIR STATUS : KO")
+                            self.wind_dir_var.set("Direction vent : " + str(self.last_wind) + "°")
+                            self.compas_var.set("Direction Nord : " + str(self.last_compas) + "°")
+
+                            if (objJson['SYSTEM STATUS']['GPS'] == 1):
+                                
+                                
+                                if (self.last_lat != objJson['GPS']['latitude']) | (self.last_long != objJson['GPS']['longitude']): # boat marker update
+
+                                    if objJson['GPS']['latitude'] != 0 : self.last_lat = objJson['GPS']['latitude']
+                                    if objJson['GPS']['longitude'] != 0 : self.last_long = objJson['GPS']['longitude']
+
+                                    self.boatmarker.set_position(objJson['GPS']['latitude'], objJson['GPS']['longitude'])
+
+                                    #time.sleep(3.01)
+
+                            if (objJson['SYSTEM STATUS']['GIR'] == 1):
+
+                                if (self.last_wind != objJson['GIROUETTE']['degVent']):
+                                    if objJson['GIROUETTE']['degVent'] != -999.99 : self.last_wind = round(objJson['GIROUETTE']['degVent'],2)
 
 
-                        if ((self.last_wind != objJson['GIROUETTE']['degVent']) | (self.last_compas != objJson['GROVE'][3]['degNord'])): # Compas display update
+                            if (objJson['SYSTEM STATUS']['IMU'] == 1):
 
-                            background = Image.new(mode="RGBA", size=(200,200))
-                            image = Image.open("upcompas.png").resize((150,150), Image.LANCZOS)
-                            x, y = image.size
-                            background.paste(image, (25,25,x+25,y+25), image)
+                                if (self.last_compas != objJson['IMU']['degNord']) :
+                                    if objJson['IMU']['degNord'] != -999.99 : self.last_compas = round(objJson['IMU']['degNord'],2)
+                                    else : self.last_compas = 0
 
-                            image2 = Image.open("arrow2.png").rotate(objJson['GROVE'][3]['degNord']).resize((110,110), Image.LANCZOS)
-                            x, y = image2.size
-                            background.paste(image2, (45, 45,x+45,y+45), image2)
+                        except ValueError:
+                            logger.error('Fichier JSON illisible')
+                            print('ERROR : Fichier JSON illisible')
 
-                            image3 = Image.open("wind_arrow2.png").rotate(objJson['GIROUETTE']['degVent']).resize((200,200), Image.LANCZOS)
-                            x, y = image3.size
-                            background.paste(image3, (0, -2,x,y-2), image3)
-
-                            background.save('newimg.png',"PNG")
-                            image5 = Image.open("newimg.png")
-
-                            self.logo_image = customtkinter.CTkImage(image5, size=(150, 150))
-                            self.navigation_frame_label = customtkinter.CTkLabel(self.frame_left,text="", image=self.logo_image,compound="left" )
-                            self.navigation_frame_label.grid(pady=(50, 0), padx=(20, 20), row=1, column=0)
-
-                            self.last_wind = objJson['GIROUETTE']['degVent']
-                            self.last_compas = objJson['GROVE'][3]['degNord']
-
-                            # try:
-                            #     image4 = Image.open("arrow2.png").resize(((50,30)), Image.LANCZOS) #.rotate(int(objJson['GIROUETTE']['degVent'])).resize(((50,30)), Image.LANCZOS)
-                            #     self.boatmarker.image(image4)
-                            #
-                            # except TypeError:
-                            #     print("error")
-
-                        #self.speed_var.set("Speed " + str(objJson['GPS']['speed']))
-                        self.compas_var.set("Compas " + str(objJson['GROVE'][0]['Compas']['x']) + " " + str(objJson['GROVE'][0]['Compas']['y']) + " " + str(objJson['GROVE'][0]['Compas']['z']))
-                        self.wind_dir_var.set("Wind dir " + str(objJson['GIROUETTE']['degVent']))
-
-
-                    except ValueError:
-                        logger.error('Fichier JSON illisible')
-                        print('ERROR : Fichier JSON illisible')
+                
+                        
+                
 
 if __name__ == "__main__":
     app = App()
