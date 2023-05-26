@@ -90,6 +90,7 @@ void get_sensor_data(){
 void send_data(){
   float tmp_gps_lat,tmp_gps_long,tmp_imu,tmp_gir = -999.99;
   comXbee.setStatusSensors(Etat_IMU,Etat_GPS,Etat_Gir);
+  comXbee.setStatusMode(old_mode);
   if(Etat_IMU){
     tmp_imu = float(imu->imu_get_data_with_negative())/10;
   }
