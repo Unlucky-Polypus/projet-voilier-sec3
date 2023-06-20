@@ -11,6 +11,7 @@ void Navigator::setBuoy(Point buoy) {
 
 
 // Returns the input of the actuators in percentage from the position of the boat, the wind direction and the actual course
+// For the safran, 50% is the central position
 CommandOutput Navigator::navigate(Point boat, float wind_angle, float course) {
   this->position = boat;
   this->wind_angle = wind_angle;
@@ -71,7 +72,9 @@ float Navigator::compute_wind_projection(float new_course) {
 }
 
 
-// Choos on which side we need to go if we are up the wind
+// Chose on which side we need to go if we are up the wind
+// azimuth : course we want to head to
+// angle : temporary course in order to ride upwind
 float Navigator::choose_side_tack(float azimuth) {
   float wind = convert_180_to_360(this->wind_angle);
   azimuth = convert_180_to_360(azimuth);
@@ -95,8 +98,11 @@ float Navigator::choose_side_tack(float azimuth) {
 
 
 // La sortie est un pourcentage de la position du moteur (PWM)
-// On suppose que le rapport entre la position du moteur et celle de la voile est linéaire
+// On suppose que le rapport entre la position du moteur et celle de la voile est linéaire (un même déplacement 
+// du moteur implique un même changement d'angle de la voile tout au long de sa course)
 // On a un angle de voile pour chaque allure (au près, de travers, vent de face et vent arrière)
+// azimuth : Pas utilisé, pourquoi je l'ai mis ?
+// return : pourcentage de la PWM associé à l'angle de la voile voilu
 float Navigator::adjust_sail(float azimuth) {
   float wind_angle = this->wind_angle;
   float abs_wind_angle = abs(wind_angle);
@@ -114,11 +120,7 @@ float Navigator::adjust_sail(float azimuth) {
       sail_angle = 35;
   // Au près
   } else if(abs_wind_angle > 35) {
-<<<<<<< HEAD
-      sail_angle = 15;
-=======
       sail_angle = 20;
->>>>>>> 2ae60d9 (Readme + modification sail orientation)
   // Vent de face
   } else {
     sail_angle = 90;
@@ -129,12 +131,17 @@ float Navigator::adjust_sail(float azimuth) {
 
 
 // Sortie en pourcentage de la position du moteur (PWM)
-// La commande est proportionelle à la différecence de trajectoire
+// La commande est proportionelle à la différecence de trajectoire entre le cap actuel et l'azimuth
+// new_course : trajectoire désirée
 float Navigator::adjust_traj(float new_course) {
   float course_diff = new_course - this->course;
   return (abs(course_diff + 180)) * 100 / 360;
 }
 
+
+// Vérifie si le bateau est arrivé à destination
+// precision : marge d'erreur en mètre
+// return : vrai si arrivé, faux sinon
 bool Navigator::arrived(float precision) {
   float lat_boat = radians(this->position.lat);
   float long_boat = radians(this->position.lon);
